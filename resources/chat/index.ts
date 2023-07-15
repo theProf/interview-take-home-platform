@@ -46,7 +46,7 @@ const addHumanMessage = (message: string, time = getCurrentDate()) => {
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-$('#message').submit(async (e) => {
+$('#message').on('submit', async (e) => {
   e.preventDefault();
 
   // grab form message
