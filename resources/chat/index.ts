@@ -1,3 +1,4 @@
+import { sendMessage } from './api';
 const $chat = $('#chat');
 
 const userID = 'bob';
@@ -14,7 +15,7 @@ const getCurrentDate = () => {
   });
 }
 
-const addBotMessage = (message, time = getCurrentDate()) => {
+export const addBotMessage = (message: string, time = getCurrentDate()) => {
   $chat.prepend(`
     <div class="media w-33 mb-2 d-flex gap-2">
       <img
@@ -30,7 +31,7 @@ const addBotMessage = (message, time = getCurrentDate()) => {
   `);
 };
 
-const addHumanMessage = (message, time = getCurrentDate()) => {
+const addHumanMessage = (message: string, time = getCurrentDate()) => {
   $chat.prepend(`
     <div class="media w-50 ml-auto mb-2 align-self-end">
       <div class="media-body">
@@ -43,13 +44,13 @@ const addHumanMessage = (message, time = getCurrentDate()) => {
   `);
 };
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 $('#message').submit(async (e) => {
   e.preventDefault();
 
   // grab form message
-  const message = $('#message-input').val().trim();
+  const message = $('#message-input').val()?.toString().trim();
   // reset input field
   $('#message-input').val('');
   if (!message) return false;

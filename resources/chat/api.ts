@@ -1,4 +1,6 @@
-function sendMessage(userID, message) {
+import { addBotMessage, delay } from './index';
+
+export function sendMessage(userID: string, message: string) {
   $.ajax({
     url: `http://localhost:4000/conversation/${diagramID}`,
     type: 'post',
