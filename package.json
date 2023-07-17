@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "nest": "yarn workspace nest",
-    "express": "yarn workspace express"
+    "express": "yarn workspace express",
+    "test": "yarn nest test",
+    "test:watch": "yarn nest test:watch"
   },
   "workspaces": [
     "backend/*"
