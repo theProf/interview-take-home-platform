@@ -1,4 +1,3 @@
-import { sendMessage } from './api';
 const $chat = $('#chat');
 
 const userID = 'bob';
@@ -15,7 +14,7 @@ const getCurrentDate = () => {
   });
 }
 
-export const addBotMessage = (message: string, time = getCurrentDate()) => {
+const addBotMessage = (message, time = getCurrentDate()) => {
   $chat.prepend(`
     <div class="media w-33 mb-2 d-flex gap-2">
       <img
@@ -31,7 +30,7 @@ export const addBotMessage = (message: string, time = getCurrentDate()) => {
   `);
 };
 
-const addHumanMessage = (message: string, time = getCurrentDate()) => {
+const addHumanMessage = (message, time = getCurrentDate()) => {
   $chat.prepend(`
     <div class="media w-50 ml-auto mb-2 align-self-end">
       <div class="media-body">
@@ -44,7 +43,7 @@ const addHumanMessage = (message: string, time = getCurrentDate()) => {
   `);
 };
 
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 $('#message').on('submit', async (e) => {
   e.preventDefault();

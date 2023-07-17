@@ -5,6 +5,7 @@ import { Reply } from "./interfaces/reply.interface";
 import { ConversationController } from "./conversation.controller";
 import { ConversationService } from "./conversation.service";
 import { InteractRequestDTO } from "./dtos/interact-request.dto";
+import { diagramProviders } from '../diagram/diagram.providers'
 
 describe("ConversationController", () => {
   let conversationController: ConversationController;
@@ -12,7 +13,7 @@ describe("ConversationController", () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ConversationService],
+      providers: [ConversationService, ...diagramProviders],
       controllers: [ConversationController],
     }).compile();
 

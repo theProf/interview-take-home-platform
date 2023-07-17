@@ -3,6 +3,7 @@ import { Test } from "@nestjs/testing";
 import { Reply } from "./interfaces/reply.interface";
 
 import { ConversationService } from "./conversation.service";
+import { diagramProviders } from "../diagram/diagram.providers";
 
 describe("ConversationService", () => {
   let conversationService: ConversationService;
@@ -10,7 +11,7 @@ describe("ConversationService", () => {
   beforeEach(async () => {
     // TODO: overkill for now, but will probably be necessary for db injection in short future
     const moduleRef = await Test.createTestingModule({
-      providers: [ConversationService],
+      providers: [ConversationService, ...diagramProviders],
     }).compile();
 
     conversationService = moduleRef.get<ConversationService>(
