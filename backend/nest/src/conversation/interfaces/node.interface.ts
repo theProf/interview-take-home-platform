@@ -6,4 +6,8 @@ export interface TextNode {
   value: NodeMarkup;
 }
 
-export type NodeMarkup = string | Array<string | { variableID: string }>;
+export interface Variable {
+  variableID: string;
+}
+
+export type NodeMarkup = string | Array<string | Variable>;
