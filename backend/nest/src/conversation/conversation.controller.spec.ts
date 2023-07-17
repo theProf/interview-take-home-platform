@@ -5,16 +5,15 @@ import { Reply } from "./interfaces/reply.interface";
 import { ConversationController } from "./conversation.controller";
 import { ConversationService } from "./conversation.service";
 import { InteractRequestDTO } from "./dtos/interact-request.dto";
-import { DiagramService } from "../diagram/diagram.service";
+import { diagramProviders } from '../diagram/diagram.providers'
 
 describe("ConversationController", () => {
   let conversationController: ConversationController;
   let conversationService: ConversationService;
-  let diagramService: DiagramService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ConversationService, DiagramService],
+      providers: [ConversationService, ...diagramProviders],
       controllers: [ConversationController],
     }).compile();
 
@@ -23,9 +22,6 @@ describe("ConversationController", () => {
     );
     conversationController = moduleRef.get<ConversationController>(
       ConversationController,
-    );
-    diagramService = moduleRef.get<DiagramService>(
-      DiagramService,
     );
   });
 

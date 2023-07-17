@@ -1,23 +1,26 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { Reply } from "../conversation//interfaces/reply.interface";
 
 import type { Variable } from "../conversation/interfaces/node.interface";
 
-// TODO: imports across workspaces and artifact output schemas
-import diagramFile from "../resources/diagram";
+import { DIAGRAM_FILE } from '../constants'
 
 @Injectable()
 export class DiagramService {
-  private diagrams = new Map(
-    Object.entries(diagramFile)
-      .map(([name, diagram]) => [
-        name,
-        {
-          variables: new Map(Object.entries(diagram.variables)),
-          nodes: new Map(Object.entries(diagram.nodes)),
-        } as FileDiagram,
-      ]),
-  );
+  private diagrams: Map<string, FileDiagram>;
+
+  constructor(@Inject(DIAGRAM_FILE) diagramFile: object) {
+    this.diagrams = new Map<string, FileDiagram>(
+      Object.entries(diagramFile)
+        .map(([name, diagram]) => [
+          name,
+          {
+            variables: new Map(Object.entries(diagram.variables)),
+            nodes: new Map(Object.entries(diagram.nodes)),
+          } as FileDiagram,
+        ]),
+    );
+  }
 
   public async findOne(
     diagramID: string,

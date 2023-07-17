@@ -3,13 +3,14 @@ import { Test } from "@nestjs/testing";
 import { Reply } from "../conversation/interfaces/reply.interface";
 
 import { DiagramService } from "./diagram.service";
+import { diagramProviders } from './diagram.providers';
 
 describe("DiagramService", () => {
   let diagramService: DiagramService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [DiagramService],
+      providers: [...diagramProviders],
     }).compile();
 
     diagramService = moduleRef.get<DiagramService>(
