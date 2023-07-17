@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Param, Post } from "@nestjs/common";
 
 import { ConversationService } from "./conversation.service";
 import { InteractRequestDTO } from "./dtos/interact-request.dto";
@@ -11,10 +11,17 @@ export class ConversationController {
   ) {}
 
   @Post(':diagramID')
-  async interaction(@Body() body: InteractRequestDTO): Promise<InteractResponseDTO> {
-    const reply = await this.messageService.interact(body.userID, body.message);
+  async interaction(
+    @Param('diagramID') diagramID: string,
+    @Body() body: InteractRequestDTO,
+  ): Promise<InteractResponseDTO> {
+    const reply = await this.messageService.interact(
+      diagramID,
+      body.userID,
+      body.message,
+    );
     return {
       reply
-    }
+    };
   }
 }
