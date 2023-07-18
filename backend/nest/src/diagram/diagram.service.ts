@@ -1,9 +1,12 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { EMPTY, expand, lastValueFrom, map, of, tap, toArray } from "rxjs";
+import { match, P } from "ts-pattern";
+
+import { Inject, Injectable } from "@nestjs/common";
 import { Reply } from "../conversation//interfaces/reply.interface";
 
 import type { Variable } from "../conversation/interfaces/node.interface";
 
-import { DIAGRAM_FILE } from '../constants'
+import { DIAGRAM_FILE } from "../constants";
 
 @Injectable()
 export class DiagramService {
@@ -17,6 +20,7 @@ export class DiagramService {
           {
             variables: new Map(Object.entries(diagram.variables)),
             nodes: new Map(Object.entries(diagram.nodes)),
+            startNodeID: diagram.startNodeID,
           } as FileDiagram,
         ]),
     );
@@ -35,31 +39,55 @@ export class DiagramService {
 
   // TODO: where does this REALLY belong
   public async getFirstPathFor(diagramID: string): Promise<Reply[]> {
-    const { variables, nodes } = await this.findOne(diagramID);
+    const { variables, nodes, startNodeID } = await this.findOne(diagramID);
 
-    let [_initialNodeName, cur] = nodes.entries().next().value;
+    // Collect Nodes for path
+    const node$ = of(startNodeID).pipe(
+      map((key) => nodes.get(key)),
+      // Follow while there is a nextID
+      expand((node) => {
+        const cur = node?.nextID && nodes.get(node.nextID);
+        if (!cur) return EMPTY;
+        return of(cur);
+      }),
+    );
 
-    const toNode = toNodeCurry(variables);
-    let replies = [toNode(cur)];
+    // Transform Node to Reply
+    const replie$ = node$.pipe(
+      map(toReply(variables)),
+      toArray(),
+    );
 
-    // TODO: refactor node traversal into generator for functional style
-    while (!!cur.nextID) {
-      // TODO: graph path check done elsewhere so we can assume existence here
-      cur = nodes.get(cur.nextID);
-      replies.push(toNode(cur));
-    }
-
-    return replies;
+    return lastValueFrom(replie$);
   }
 }
 
+// TODO: what kind of NestJS module shoulld this be?
+export const toReply = (variables: Map<string, string>) => (node: DiagramNode): Reply =>
+  match(node)
+    // TODO: proper typing
+    .with({ type: "text" }, fromText(variables))
+    // TODO: expand handlers here
+    //.with({ type: "image" }, fromImage(variables))
+    //.with({ type: "video" }, fromVideo(variables))
+    .exhaustive();
+
+export const fromText =
+  (variables: Map<string, string>) => ({ type, value }: DiagramNode): Reply => ({
+    type,
+    text: !Array.isArray(value) ? value : value
+      .map((v) => isVariable(v) ? variables.get(v.variableID) : v)
+      .join(""),
+  });
+
+// TODO: clean these up to proper types
 interface VariableRef extends Variable {
   variableID: string;
 }
 
 type NodeType = "text";
 
-interface FileNode {
+export interface DiagramNode {
   type: NodeType;
   value: string | Array<string | VariableRef>;
   nextID: null | string;
@@ -67,7 +95,8 @@ interface FileNode {
 
 interface FileDiagram {
   variables: Map<string, string>;
-  nodes: Map<string, FileNode>;
+  nodes: Map<string, DiagramNode>;
+  startNodeID: string;
 }
 
 interface TT {
@@ -78,14 +107,3 @@ interface TT {
 function isVariable(v: string | VariableRef): v is VariableRef {
   return !(typeof v === "string") && "variableID" in v;
 }
-
-const toText = ({ variables, value }: TT) =>
-  !Array.isArray(value) ? value : value
-    .map((v) => isVariable(v) ? variables.get(v.variableID) : v)
-    .join("");
-
-const toNodeCurry =
-  (variables: Map<string, string>) => ({ type, value }: FileNode): Reply => ({
-    type,
-    text: toText({ variables, value }),
-  });

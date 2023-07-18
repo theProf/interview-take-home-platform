@@ -3850,6 +3850,11 @@ ts-jest@^29.1.1:
     semver "^7.5.3"
     yargs-parser "^21.0.1"
 
+ts-pattern@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.0.3.tgz#bd81acab451428eeab2c9cb49eafe0ac9a2611ac"
+  integrity sha512-JMfGCcuRz0/efyv7vI71QgIp7en2n7KxQ/cFk9nlyo8eFFgsa6TEfbnKw3N5mLGo7Mf8oUwOyRpTEqXU0kuV+w==
+
 tsconfig-paths-webpack-plugin@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/tsconfig-paths-webpack-plugin/-/tsconfig-paths-webpack-plugin-4.1.0.tgz#3c6892c5e7319c146eee1e7302ed9e6f2be4f763"
