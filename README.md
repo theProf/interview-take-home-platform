@@ -13,7 +13,7 @@ Provided are two templates using different frameworks: NestJS and Express (comin
 
 Create an endpoint to take in a message from the chat app. That endpoint should reference a `diagram` ID that you need to load from the resources. These resources are [just files](./resources/data/diagram.js), but treat this like you'd handle any other need for a database.
 
-Once you have the diagram, you need to follow the `nodes` within. Depending on the `type` of node you need to output a different `reply`. For now this only includes `text` nodes, but we would want to extend this in the future. You need to take the node type and process it to get a `reply` object back.
+Once you have the diagram, you need to follow the `nodes` within (starting from the `startNodeID`). Depending on the `type` of node you need to output a different `reply`. For now this only includes `text` nodes, but we would want to extend this in the future. You need to take the node type and process it to get a `reply` object back.
 > :information_source: Normally some natural language understanding would be applied to the message and the diagram would be processed differently depending on what was said. But for this exercise, we will just process all nodes in the diagram every time.
 
 You should return an array of each `reply` to the caller, following this example:
@@ -37,7 +37,6 @@ When a message is received, we also need to send this off to an analytics servic
 ## Data Structures
 
 The data structures you'll be working with can be found in the [`interfaces` folder](backend/nest/src/conversation/interfaces).
-
 
 ## Setup
 
