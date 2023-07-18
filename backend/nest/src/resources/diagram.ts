@@ -3,6 +3,7 @@ export default {
     variables: {
       place: 'World',
     },
+    startNodeID: 'node-1',
     nodes: {
       'node-1': {
         type: 'text',
